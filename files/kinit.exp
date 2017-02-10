@@ -1,0 +1,18 @@
+#!/usr/bin/expect
+
+set timeout 9
+
+# Retrieve Variables
+# set username [lindex $argv 0];
+# set password [lindex $argv 1];
+# set realm [lindex $argv 2];
+lassign $argv username password realm
+
+# Create/Renew kinit ticket
+spawn kinit $username@$realm
+expect "Password*:"
+send "$password\r"
+expect eof
+
+lassign [wait] pid spawnid os_error_flag value
+exit $value

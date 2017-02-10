@@ -1,0 +1,23 @@
+---
+# IPA Keberos Realm and Domain
+ipaserver_realm: "TESTLAB"
+ipaserver_domain: "{{ ansible_fqdn.split('.')[1:] | join('.')}}"
+
+# IPA Kerberos Admin Configuration
+ipaserver_admin_username: ipaadmin
+ipaserver_admin_password : ipaadmin123
+ipaserver_dir_admin_password : ipaadmin123
+
+# ipaserver_configure_ssh: True
+# ipaserver_configure_sshd: True
+# ipaserver_dns_forwarder: 8.8.8.8
+# ipaserver_hbac_allow: True
+# ipaserver_idstart: 5000
+# ipaserver_idmax: False
+# ipaserver_setup_dns: True
+# ipaserver_setup_ntp: True
+# ipaserver_ssh_trust_dns: True
+# ipaserver_ui_redirect: True
+# ipaserver_manage_firewalld: True
+
+

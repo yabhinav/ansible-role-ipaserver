@@ -1,0 +1,21 @@
+---
+
+ipaserver_packages:
+  - ipa-server
+  - bind
+  - bind-dyndb-ldap
+  - ipa-python
+  - sssd-ldap
+  - expect
+
+ipaserver_base_command: ipa-server-install -U
+
+# IPA Ports Keep Alive check Post installation
+ipa_ports:
+  - 80  # HTTP
+  - 443 # HTTPS
+  - 389 # LDAP
+  - 636 # LDAPS
+  - 88  # Kerberos
+  - 464 # Kerberos
+  #- 123 # NTP #UDP #Cannot be verified

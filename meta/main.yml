@@ -1,0 +1,26 @@
+galaxy_info:
+  author: Abhinav Yalamanchili
+  description: Install a clean IPA server for RHEL/CentOS and Debian/Ubuntu.
+
+  license: MIT
+
+  min_ansible_version: 2.1.0
+
+  # github_branch: release
+
+  platforms:
+    - name: EL
+      versions:
+      - 6
+      - 7
+    - name: Ubuntu
+      versions:
+      - all
+    - name: Debian
+      versions:
+      - all
+
+  galaxy_tags: ['ipaserver','freeipa','install',kerberos','security']
+
+
+dependencies: []
