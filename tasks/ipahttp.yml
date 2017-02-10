@@ -1,0 +1,21 @@
+---
+
+# Generate a new ipakeytab since IPA is installed/ configuration changed
+- name: Generate IPA Server keytab
+  shell: "{{ item }}"
+  args:
+    chdir: /etc/httpd/conf
+  with_items:
+    - "ipa-getkeytab -s {{ ansible_fqdn }} -p HTTP/{{ ansible_fqdn }}@{{ ipaserver_realm }} -k ipa.keytab.new"
+    - "cp ipa.keytab ipa.keytab.orig "
+    - "mv ipa.keytab.new ipa.keytab"
+    - "chown apache:apache ipa.keytab*"
+  register: ipakeytab
+  when: ipasetup.changed
+  become: True
+
+# Restart Apache HTTP Server to incude new keytab
+- name: Restart httpd
+  service:  name=httpd state=restarted enabled=yes
+  when: ipakeytab.changed
+  become: True

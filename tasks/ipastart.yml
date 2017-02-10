@@ -1,0 +1,16 @@
+---
+# Start IPA Directory Service
+- block:
+    - name: Check if Directory Service is running
+      shell: "/usr/sbin/ipactl status"
+      register: ipastatus
+      failed_when: "'Directory Service: STOPPED' in ipastatus.stdout or 'Failed' in ipastatus.stderr"
+      changed_when: False
+  rescue:
+    - name: Start Directory Service
+      service: name=dirsrv state=started enabled=yes
+  always:
+    - name: Wait for IPA HTTP/LDAP/Kerberos Ports
+      wait_for: port="{{ item }}" timeout=60
+      with_items: "{{ ipa_ports }}"
+  become: True

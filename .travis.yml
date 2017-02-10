@@ -5,6 +5,7 @@ env:
   - distro: centos7
     init: /usr/lib/systemd/systemd
     run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    playbook: test.yml
   - distro: centos6
     init: /sbin/init
     run_opts: ""
@@ -12,12 +13,15 @@ env:
   - distro: ubuntu1604
     init: /lib/systemd/systemd
     run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    playbook: test.yml
   - distro: ubuntu1404
     init: /sbin/init
     run_opts: ""
+    playbook: test.yml
   - distro: ubuntu1204
     init: /sbin/init
     run_opts: ""
+    playbook: test.yml
 
 before_install:
   # Pull container.

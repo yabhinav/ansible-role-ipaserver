@@ -1,0 +1,28 @@
+---
+
+- stat:
+    path: /etc/httpd/conf.d/ssl.conf
+  register: ssl
+
+# If needs mod_nss listening on 443 , so change mod_ssl listening port to other than 443 
+- name: Check if mod_ssl configured to port 443 and change to 10443(Conflict with mod_nss)
+  lineinfile: dest=/etc/httpd/conf.d/ssl.conf regexp="^{{item.key}}" line="{{item.key}}{{item.value}}"
+  with_items:
+    - key: "Listen"
+      value: " 10443"
+    - key: "<VirtualHost _default_:"
+      value: "10443>"
+  when : ssl.stat.exists
+  register: mod_ssl
+  become: True
+
+- block:
+    - name: Restart httpd
+      service: name=httpd state=restarted
+    # 443 Free to be used by mod_nss
+    - name: Wait for 443 mod_nss to be available and free
+      wait_for: port=443 state=drained delay=20
+    - name: Wait for 10443 mod_ssl to be open 
+      wait_for: port=10443 state=present delay=20
+  when: ssl.stat.exists and mod_ssl.changed
+  become: True
