@@ -1,7 +1,16 @@
 ---
 
+- name: Gather OS Specific Variables
+  include_vars: "{{ item }}"
+  with_first_found:
+   - "../vars/{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml"
+   - "../vars/{{ ansible_distribution }}.yml"
+   - "../vars/{{ ansible_os_family }}.yml"
+   - "../vars/defaults.yml"
+
 - name: Install IPA Server Packages
-  yum: name="{{ item }}" state=present
+  action: >
+    {{ansible_pkg_mgr}} name="{{ item }}" state=present
   with_items: "{{ ipaserver_packages }}"
   become: True
 
@@ -21,7 +30,7 @@
       changed_when: False
   rescue:
     - name: Kinit IPA Admin
-      script: ./library/kinit.exp {{ ipaserver_admin_username }} {{ ipaserver_admin_password }} {{ ipaserver_realm }}
+      script: kinit.exp {{ ipaserver_admin_username }} {{ ipaserver_admin_password }} {{ ipaserver_realm }}
       no_log: True
   become: True
 
