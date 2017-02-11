@@ -1,7 +1,7 @@
 IPA Server 
 ==========
 
-[![Build Status](https://travis-ci.org/yabhinav/ansible-role-ipaserver.svg?branch=master)](https://travis-ci.org/yabhinav/ansible-role-ipaserver)
+[![Build Status](https://travis-ci.org/yabhinav/ansible-role-ipaserver.svg?branch=release)](https://travis-ci.org/yabhinav/ansible-role-ipaserver)
 
 A role that installs and configures IPA server.
 
@@ -56,12 +56,13 @@ Example Playbook
 	- hosts: localhost
 	  become_user: True
 	  gather_facts: True
+
 	  roles:
 	    - yabhinav.ipaserver
 
 License
 -------
-
+	
 MIT
 
 
