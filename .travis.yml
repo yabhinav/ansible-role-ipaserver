@@ -42,7 +42,6 @@ script:
     # Hostname checks.
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm cat /etc/hosts'
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm hostname'
-  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ping testlab.example.com'
 
   # - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible all -m setup'
 
@@ -50,7 +49,13 @@ script:
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} --syntax-check'
 
   # Test role.
-  - 'docker exec "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook}'
+  - Firstrun=$(mktemp)
+  - docker exec "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} | tee -a ${Firstrun}
+  - >
+    tail ${Firstrun}
+    | grep -q 'changed=*failed=0'
+    && (echo 'Firstrun test: pass' && exit 0)
+    || (echo 'Firstrun test: fail' && exit 1)
 
   # Test role idempotence.
   - idempotence=$(mktemp)
