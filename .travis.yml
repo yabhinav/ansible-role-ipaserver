@@ -31,12 +31,12 @@ before_install:
 script:
   - container_id=$(mktemp)
   # Run container in detached state.
-  - 'docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} geerlingguy/docker-${distro}-ansible:latest "${init}" > "${container_id}"'
+  - 'docker run --detach --name:${distro}.ipaserver.example.com --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} geerlingguy/docker-${distro}-ansible:latest "${init}" > "${container_id}"'
 
   # Ansible version check.
-  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible --version --syntax-check'
+  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible --version'
 
-  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible all -m setup'
+  # - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible all -m setup'
 
   # Ansible syntax check.
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} --syntax-check'
