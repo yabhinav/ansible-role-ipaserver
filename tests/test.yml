@@ -3,10 +3,5 @@
   gather_facts: yes
   become: yes
 
-  vars:
-    - ipaserver_realm: "TESTLAB"
-    - ipaserver_domain : "TESTLAB.EXAMPLE.COM"
-
-
   roles:
     - role_under_test

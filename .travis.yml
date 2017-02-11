@@ -10,6 +10,9 @@ env:
     init: /sbin/init
     run_opts: ""
     playbook: test.yml
+  # - distro: fedora24
+  #   init: /usr/lib/systemd/systemd
+  #   run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
   # - distro: ubuntu1604
   #   init: /lib/systemd/systemd
   #   run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
@@ -54,12 +57,14 @@ script:
     || (echo 'Idempotence test: fail' && exit 1)
 
   # Check if IPA Server is running
+  - 'docker exec "$(cat ${container_id})" ipactl status'
 
   # Check klist
+  - 'docker exec "$(cat ${container_id})" klist'
 
-after_failure:
-  # Check MySQL settings.
-  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm cat /var/log/ipaserver-install.log'
+  # Check IPA user command
+  - 'docker exec "$(cat ${container_id})" ipa user-find admin'
+
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
