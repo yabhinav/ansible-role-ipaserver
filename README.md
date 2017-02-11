@@ -19,7 +19,6 @@ Mandatory variable are listed here with default values :
 	ipaserver_realm: "TESTLAB"
 	ipaserver_domain: "TESTLAB.EXAMPLE.COM"
 
-	ipaserver_admin_username: ipaadmin
 	ipaserver_admin_password : * * * * * * * * * * * 
 	ipaserver_dir_admin_password : * * * * * * * * * * * 
 
@@ -37,6 +36,10 @@ Optional variables are listed here with default values:
 	ipaserver_ssh_trust_dns: True
 	ipaserver_ui_redirect: True
 	ipaserver_manage_firewalld: True
+
+Other variables that should not be changed :
+
+	ipaserver_admin_username: admin
 
 
 Dependencies

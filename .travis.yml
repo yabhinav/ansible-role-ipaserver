@@ -39,10 +39,10 @@ script:
   # Ansible version check.
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible --version'
 
-    # Ansible version check.
+    # Hostname checks.
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm cat /etc/hosts'
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm hostname'
-  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ping hostname'
+  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ping testlab.example.com'
 
   # - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible all -m setup'
 
@@ -50,7 +50,7 @@ script:
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} --syntax-check'
 
   # Test role.
-  - 'docker exec "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} -vvv'
+  - 'docker exec "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook}'
 
   # Test role idempotence.
   - idempotence=$(mktemp)

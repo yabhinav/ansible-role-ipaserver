@@ -31,7 +31,7 @@
   rescue:
     - name: Kinit IPA Admin
       script: kinit.exp {{ ipaserver_admin_username }} {{ ipaserver_admin_password }} {{ ipaserver_realm }}
-      # no_log: True
+      no_log: True
   become: True
 
 - name: Generate HTTP Keytab for IPA Web Server

@@ -4,7 +4,8 @@ ipaserver_realm: "TESTLAB"
 ipaserver_domain: "{{ ansible_fqdn.split('.')[1:] | join('.')}}"
 
 # IPA Kerberos Admin Configuration
-ipaserver_admin_username: ipaadmin
+# Donot change the admin username, will cause issues with kinit
+ipaserver_admin_username: admin 
 ipaserver_admin_password : ipaadmin123
 ipaserver_dir_admin_password : ipaadmin123
 
