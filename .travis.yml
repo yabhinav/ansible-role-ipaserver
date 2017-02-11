@@ -36,7 +36,7 @@ before_install:
 script:
   - container_id=$(mktemp)
   # Run container in detached state.
-  - 'docker run --detach -h testlab.example.com --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} bertvv/ansible-testing:${distribution}_${version} "${init}" > "${container_id}"'
+  - 'docker run --detach -h testlab.example.com --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} williamyeh/ansible:${distribution}${version} "${init}" > "${container_id}"'
 
   # Ansible version check. Run on latest
   # - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm pip install --upgrade ansible'
