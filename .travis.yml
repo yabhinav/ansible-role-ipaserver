@@ -12,11 +12,11 @@ env:
     init: /usr/lib/systemd/systemd
     run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
     playbook: test.yml
-  # - distribution: fedora
-  #   version: 25
-  #   init: /usr/lib/systemd/systemd
-  #   run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-  #   playbook: test.yml
+  - distribution: fedora
+    version: 25
+    init: /usr/lib/systemd/systemd
+    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    playbook: test.yml
   # - distribution: ubuntu
   #   version: 14.04
   #   init: /sbin/init
@@ -38,7 +38,8 @@ script:
   # Run container in detached state.
   - 'docker run --detach -h testlab.example.com --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} bertvv/ansible-testing:${distribution}_${version} "${init}" > "${container_id}"'
 
-  # Ansible version check.
+  # Ansible version check. Run on latest
+  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm pip install --upgrade ansible'
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible --version'
 
   # Hostname checks.
