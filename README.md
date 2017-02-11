@@ -1,13 +1,13 @@
 IPA Server 
 ==========
 
-[![Build Status](https://travis-ci.org/yabhinav/ansible-role-ipaserver.svg?branch=master)](https://travis-ci.org/yabhinav/ansible-role-ipaserver)
+[![Build Status](https://travis-ci.org/yabhinav/ansible-role-ipaserver.svg?branch=release)](https://travis-ci.org/yabhinav/ansible-role-ipaserver)
 
 A role that installs and configures IPA server.
 
 Requirements
 ------------
-- Requires you Linux machine doesn't have other kerberos installation like MIT-KDC and AD configuration. krb5.conf will be over written by IPA installation.
+- Requires your Linux machine doesn't have other kerberos installation like MIT-KDC and AD configuration. _krb5.conf_ will be over written by IPA installation.
 - If mod_ssl is configure to listen to port 443 it will be reconfigured to use port 10443 as a direct conflict with mod_nss installation.
 
 
@@ -23,7 +23,7 @@ Mandatory variable are listed here with default values :
 	ipaserver_dir_admin_password : * * * * * * * * * * * 
 
 
-Optional variables are listed here with default values:
+Optional variables are listed here with default values :
 
 	ipaserver_configure_ssh: True
 	ipaserver_configure_sshd: True
@@ -45,19 +45,19 @@ Other variables that should not be changed :
 Dependencies
 ------------
 
-	 None.
+None.
 
 Example Playbook
 ----------------
 
 	- hosts: localhost
-	  remote_user: root
+	  become_user: True
 	  roles:
 	    - yabhinav.ipaserver
 
 License
 -------
-
+	
 MIT
 
 
