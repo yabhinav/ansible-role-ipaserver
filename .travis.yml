@@ -43,7 +43,7 @@ script:
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm cat /etc/hosts'
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm hostname'
 
-  # - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible all -m setup'
+  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible all -m setup'
 
   # Ansible syntax check.
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} --syntax-check'

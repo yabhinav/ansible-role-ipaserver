@@ -6,8 +6,5 @@
   pre_tasks:
     - setup: gather_subset=network,virtual
 
-    - debug: 
-        var: ansible_facts
-
   roles:
     - role_under_test
