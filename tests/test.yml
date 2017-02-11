@@ -3,10 +3,11 @@
   gather_facts: True
   become: True
 
-
   pre_tasks:
-   - debug: 
-      var: ansible_facts
+    - setup: gather_subset=network,virtual
+
+    - debug: 
+        var: ansible_facts
 
   roles:
     - role_under_test
