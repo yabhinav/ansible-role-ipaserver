@@ -17,7 +17,7 @@ Role Variables
 Mandatory variable are listed here with default values :
 
 	ipaserver_realm: "TESTLAB"
-	ipaserver_domain: "{{ ansible_fqdn.split('.')[1:] | join('.')}}"
+	ipaserver_domain: "TESTLAB.EXAMPLE.COM"
 
 	ipaserver_admin_username: ipaadmin
 	ipaserver_admin_password : * * * * * * * * * * * 

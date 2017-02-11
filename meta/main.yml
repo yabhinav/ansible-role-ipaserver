@@ -13,12 +13,12 @@ galaxy_info:
       versions:
       - 6
       - 7
-    - name: Ubuntu
-      versions:
-      - all
-    - name: Debian
-      versions:
-      - all
+    # - name: Ubuntu
+    #   versions:
+    #   - all
+    # - name: Debian
+    #   versions:
+    #   - all
 
   galaxy_tags: ['ipaserver','freeipa','install',kerberos','security']
 
