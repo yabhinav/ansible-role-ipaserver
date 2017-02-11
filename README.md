@@ -23,7 +23,7 @@ Mandatory variable are listed here with default values :
 	ipaserver_dir_admin_password : * * * * * * * * * * * 
 
 
-Optional variables are listed here with default values:
+Optional variables are listed here with default values :
 
 	ipaserver_configure_ssh: True
 	ipaserver_configure_sshd: True
@@ -51,7 +51,8 @@ Example Playbook
 ----------------
 
 	- hosts: localhost
-	  remote_user: root
+	  become_user: True
+	  gather_facts: True
 	  roles:
 	    - yabhinav.ipaserver
 
