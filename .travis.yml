@@ -78,5 +78,5 @@ script:
   - 'docker exec "$(cat ${container_id})" ipa user-find admin'
 
 
-notifications:
-  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+# notifications:
+#   webhooks: https://galaxy.ansible.com/api/v1/notifications/
