@@ -6,7 +6,7 @@ galaxy_info:
 
   min_ansible_version: 2.2.1
 
-  # github_branch: release
+  github_branch: release
 
   platforms:
     - name: EL

@@ -64,4 +64,4 @@ MIT
 Author Information
 ------------------
 
-Created by [Abhinav Yalamanchili](https://github.com/yabhinav)
+Created by [Abhinav Yalamanchili](https://yabhinav.github.com)
