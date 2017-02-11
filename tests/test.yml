@@ -5,8 +5,8 @@
 
 
   pre_tasks:
-   - setup:
-       filter: ansible_default_ipv4*
+   - debug: 
+      var: ansible_facts
 
   roles:
     - role_under_test

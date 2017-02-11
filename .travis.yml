@@ -49,13 +49,13 @@ script:
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} --syntax-check'
 
   # Test role.
-  - Firstrun=$(mktemp)
-  - docker exec "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} | tee -a ${Firstrun}
+  - testrun=$(mktemp)
+  - docker exec "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} | tee -a ${testrun}
   - >
-    tail ${Firstrun}
-    | grep -q 'changed=*failed=0'
-    && (echo 'Firstrun test: pass' && exit 0)
-    || (echo 'Firstrun test: fail' && exit 1)
+    tail ${testrun}
+    | grep -q 'changed=.*failed=0'
+    && (echo 'Role test: pass' && exit 0)
+    || (echo 'Role test: fail' && exit 1)
 
   # Test role idempotence.
   - idempotence=$(mktemp)
