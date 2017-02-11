@@ -2,39 +2,36 @@
 services: docker
 
 env:
-  - distro: centos/7
+  - distribution: centos  # Linux distribution
+    version: 6            # Distribution version
+    init: /sbin/init      # Path to init executable (differs for SysVInit/Systemd)
+    run_opts: ""          # Additional options for running the Docker container
+    playbook: test.yml    # Test playbook for the distribution
+  - distribution: centos
+    version: 7
     init: /usr/lib/systemd/systemd
     run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
     playbook: test.yml
-  - distro: centos/6
+  - distribution: ubuntu
+    version: 14.04
     init: /sbin/init
     run_opts: ""
     playbook: test.yml
-  # - distro: fedora24
-  #   init: /usr/lib/systemd/systemd
-  #   run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-  # - distro: ubuntu1604
-  #   init: /lib/systemd/systemd
-  #   run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-  #   playbook: test.yml
-  # - distro: ubuntu1404
-  #   init: /sbin/init
-  #   run_opts: ""
-  #   playbook: test.yml
-  # - distro: ubuntu1204
-  #   init: /sbin/init
-  #   run_opts: ""
-  #   playbook: test.yml
+  - distribution: ubuntu
+    version: 12.04
+    init: /sbin/init
+    run_opts: ""
+    playbook: test.yml
 
 before_install:
   # Pull container.
-  - 'docker pull yabhinav/docker-images-ansible/${distro}:latest'
+  - 'docker pull bertvv/ansible-testing:${distribution}_${version}:latest'
 
 
 script:
   - container_id=$(mktemp)
   # Run container in detached state.
-  - 'docker run --detach -h testlab.example.com --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} yabhinav/docker-images-ansible/${distro}:latest "${init}" > "${container_id}"'
+  - 'docker run --detach -h testlab.example.com --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} bertvv/ansible-testing:${distribution}_${version}:latest:latest "${init}" > "${container_id}"'
 
   # Ansible version check.
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible --version'
