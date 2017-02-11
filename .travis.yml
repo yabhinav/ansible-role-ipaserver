@@ -12,6 +12,11 @@ env:
     init: /usr/lib/systemd/systemd
     run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
     playbook: test.yml
+  # - distribution: fedora
+  #   version: 25
+  #   init: /usr/lib/systemd/systemd
+  #   run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+  #   playbook: test.yml
   # - distribution: ubuntu
   #   version: 14.04
   #   init: /sbin/init
@@ -36,11 +41,11 @@ script:
   # Ansible version check.
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible --version'
 
-    # Hostname checks.
+  # Hostname checks.
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm cat /etc/hosts'
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm hostname'
 
-  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible all -m setup'
+  # - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible all -m setup'
 
   # Ansible syntax check.
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} --syntax-check'
