@@ -2,6 +2,7 @@
 
 ipaserver_packages:
   - ipa-server
+  - ipa-client
   - bind
   - bind-dyndb-ldap
   - ipa-python
