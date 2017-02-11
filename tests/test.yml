@@ -3,8 +3,5 @@
   gather_facts: True
   become: True
 
-  pre_tasks:
-    - setup: gather_subset=network,virtual
-
   roles:
     - role_under_test
