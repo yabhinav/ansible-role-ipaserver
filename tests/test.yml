@@ -1,5 +1,7 @@
 ---
 - hosts: all
+  gather_facts: yes
+  become: yes
 
   vars:
     - ipaserver_realm: "TESTLAB"

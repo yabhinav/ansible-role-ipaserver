@@ -36,6 +36,8 @@ script:
   # Ansible version check.
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible --version --syntax-check'
 
+  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible all -m setup'
+
   # Ansible syntax check.
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} --syntax-check'
 
