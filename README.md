@@ -7,7 +7,7 @@ A role that installs and configures IPA server.
 
 Requirements
 ------------
-- Requires you Linux machine doesn't have other kerberos installation like MIT-KDC and AD configuration. krb5.conf will be over written by IPA installation.
+- Requires your Linux machine doesn't have other kerberos installation like MIT-KDC and AD configuration. krb5.conf will be over written by IPA installation.
 - If mod_ssl is configure to listen to port 443 it will be reconfigured to use port 10443 as a direct conflict with mod_nss installation.
 
 
@@ -45,7 +45,7 @@ Other variables that should not be changed :
 Dependencies
 ------------
 
-	 None.
+None.
 
 Example Playbook
 ----------------
