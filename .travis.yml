@@ -12,26 +12,26 @@ env:
     init: /usr/lib/systemd/systemd
     run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
     playbook: test.yml
-  - distribution: ubuntu
-    version: 14.04
-    init: /sbin/init
-    run_opts: ""
-    playbook: test.yml
-  - distribution: ubuntu
-    version: 12.04
-    init: /sbin/init
-    run_opts: ""
-    playbook: test.yml
+  # - distribution: ubuntu
+  #   version: 14.04
+  #   init: /sbin/init
+  #   run_opts: ""
+  #   playbook: test.yml
+  # - distribution: ubuntu
+  #   version: 12.04
+  #   init: /sbin/init
+  #   run_opts: ""
+  #   playbook: test.yml
 
 before_install:
   # Pull container.
-  - 'docker pull bertvv/ansible-testing:${distribution}_${version}:latest'
+  - 'docker pull bertvv/ansible-testing:${distribution}_${version}'
 
 
 script:
   - container_id=$(mktemp)
   # Run container in detached state.
-  - 'docker run --detach -h testlab.example.com --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} bertvv/ansible-testing:${distribution}_${version}:latest:latest "${init}" > "${container_id}"'
+  - 'docker run --detach -h testlab.example.com --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} bertvv/ansible-testing:${distribution}_${version} "${init}" > "${container_id}"'
 
   # Ansible version check.
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible --version'
