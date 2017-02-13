@@ -1,0 +1,12 @@
+---
+
+# Making Sure TGT is available for next steps
+- block:
+    - name: Check for Valid Kerberos TGT Cache
+      shell: "klist -s"
+      changed_when: False
+  rescue:
+    - name: Kinit IPA Admin
+      script: kinit.exp {{ ipaserver_admin_username }} {{ ipaserver_admin_password }} {{ ipaserver_realm }}
+      no_log: True
+  become: True

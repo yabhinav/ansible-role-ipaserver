@@ -3,5 +3,10 @@
   gather_facts: True
   become: True
 
+  pre_tasks:
+    # Disable SELinux
+    # - selinux:
+    #     state: disabled
+
   roles:
     - role_under_test
