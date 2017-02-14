@@ -1,7 +1,7 @@
 ---
 
 # Refer https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Identity_Management_Guide/installing-ipa.html#Installing_the_IPA_Server_Packages
-- block:
+- block:    
     - name: Run the IPA Server installer
       shell :
        "{{ ipaserver_base_command }}
@@ -25,7 +25,9 @@
         creates: /etc/ipa/setup_ansible.done
       register: ipasetup
   always:
-  # Mark Server Configuration Done 
+  # Mark Server Configuration Done only if successfull to ensure to skip server or client installation
+  # Using /etc/ipa/default.conf will cause issues when ipa-setup is not successfully
+  # In such case uninstall and install again
     - name: Set IPA Server Install and Configuring Done
       file: dest=/etc/ipa/setup_ansible.done state=touch mode=0755
       when: "ipasetup.changed and 'Setup complete' in ipasetup.stdout "
