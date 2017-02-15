@@ -7,7 +7,6 @@ ipaserver_packages:
   - ipa-python
   - sssd-ldap
   - expect
-  - 389-ds-base
 
 ipaserver_base_command: ipa-server-install -U
 

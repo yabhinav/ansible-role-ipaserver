@@ -16,7 +16,7 @@ Role Variables
 
 Mandatory variable are listed here with default values :
 
-	ipaserver_realm: "TESTLAB"
+	ipaserver_realm: "EXAMPLE.COM"
 	ipaserver_domain: "example.com"
 
 	ipaserver_admin_password : * * * * * * * * * * * 
