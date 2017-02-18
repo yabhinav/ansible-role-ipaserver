@@ -29,11 +29,11 @@ before_install:
 before_script:
   # Fetch the latest test code for the role
   - 'git clone --depth 1 https://github.com/yabhinav/ansible-test-suite'
-  - mv ansible-test-suite/$rolename/* . &&  rm -rf ansible-test-suite
+  - 'mv ansible-test-suite/$rolename/* . &&  rm -rf ansible-test-suite ' 
 
 script:
   # Create container and load the role as a volume
-  - ./docker-tests.sh
+  - /bin/bash docker-tests.sh
 
 
 notifications:
