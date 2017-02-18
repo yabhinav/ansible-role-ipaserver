@@ -3,7 +3,7 @@ services: docker
 
 env:
   global:
-    - ansible_opts: "source ~/.bashrc; workon ansible_$ansible_version"
+    - ansible_opts: "source ~/.bashrc; workon ansible_$ansible_version
   matrix:
     - distribution: centos       # Linux distribution
       version: 6                 # Distribution version
@@ -36,7 +36,7 @@ before_install:
 
 script:
   # Run container in detached state.
-  - 'docker run --detach -h testlab.example.com --name testlab --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} yabhinav/ansible:${distribution}${version}-multi bash '
+  - 'docker run -td -h testlab.example.com --name testlab --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} yabhinav/ansible:${distribution}${version}-multi bash '
 
   - docker ps -a 
 
