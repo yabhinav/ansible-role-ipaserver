@@ -1,86 +1,40 @@
 ---
-services: docker
+
+sudo: required
 
 env:
-  global:
-    - ansible_opts: "source ~/.bashrc; workon ansible_$ansible_version"
+  global: 
+    - rolename : ansible-role-ipaserver
   matrix:
     - distribution: centos       # Linux distribution
       version: 6                 # Distribution version
-      run_opts: ""               # Additional options for running the Docker container
-      ansible_version: 2.2.0.0   # version of ansible to run the playbooks
-      playbook: test.yml         # Test playbook for the distribution
     - distribution: centos
       version: 7
-      run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-      ansible_version: 2.2.0.0  
-      playbook: test.yml
     - distribution: fedora
       version: 25
-      run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-      ansible_version: 2.2.0.0 
-      playbook: test.yml
     # - distribution: ubuntu
     #   version: 14.04
     #   run_opts: ""
-    #   playbook: test.yml
     # - distribution: ubuntu
     #   version: 12.04
     #   run_opts: ""
-    #   playbook: test.yml
+
+services: docker
 
 before_install:
-  # Pull container.
-  - 'docker pull yabhinav/ansible:${distribution}${version}-multi'
+  # Install latest Git
+  - sudo apt-get install --only-upgrade git 
 
+
+before_script:
+  # Fetch the latest test code for the role
+  - 'git clone --depth 1 https://github.com/yabhinav/ansible-test-suite'
+  - mv ansible-test-suite/$rolename/* . &&  rm -rf ansible-test-suite
 
 script:
-  # Run container in detached state.
-  - 'docker run -td -h testlab.example.com --name testlab --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} yabhinav/ansible:${distribution}${version}-multi bash '
-
-  - docker ps -a 
-
-  # Hostname checks.
-  - 'docker exec --tty testlab env TERM=xterm cat /etc/hosts'
-  - 'docker exec --tty testlab env TERM=xterm hostname -f '
-  - 'docker exec --tty testlab env TERM=xterm hostname -d'
-
-  # Ansible version check.
-  - 'docker exec --tty testlab bash -c "$ansible_opts; ansible --version" '
-
-  # - 'docker exec --tty "$(cat ${container_id})" bash -c "source ~/.bashrc; workon ansible_2.2.0.0; ansible all -m setup'
-
-  # Ansible syntax check.
-  - 'docker exec --tty testlab bash -c "$ansible_opts; ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} --syntax-check " '
-
-  # Test role.
-  - testrun=$(mktemp)
-  - docker exec --tty testlab bash -c "$ansible_opts; ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook}" | tee -a ${testrun}
-  - >
-    tail ${testrun}
-    | grep -q 'changed=.*failed=0'
-    && (echo 'Role test: pass' && exit 0)
-    || (echo 'Role test: fail' && exit 1)
-
-  # Test role idempotence.
-  - idempotence=$(mktemp)
-  - docker exec --tty testlab" bash -c "$ansible_opts; ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook}" | tee -a ${idempotence}
-  - >
-    tail ${idempotence}
-    | grep -q 'changed=0.*failed=0'
-    && (echo 'Idempotence test: pass' && exit 0)
-    || (echo 'Idempotence test: fail' && exit 1)
-
-  # Check if IPA Server is running
-  - 'docker exec testlab ipactl status'
-
-  # Check klist
-  - 'docker exec testlab klist'
-
-  # Check IPA user command
-  - 'docker exec testlab ipa user-find admin'
+  # Create container and load the role as a volume
+  - ./docker-tests.sh
 
 
-
-# notifications:
-#   webhooks: https://galaxy.ansible.com/api/v1/notifications/
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
