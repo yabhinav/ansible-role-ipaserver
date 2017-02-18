@@ -33,13 +33,12 @@ before_install:
   # Pull container.
   - 'docker pull yabhinav/ansible:${distribution}${version}-multi'
 
-before_script :
-  - 
-
 
 script:
   # Run container in detached state.
-  - 'docker run --detach -h testlab.example.com --name teslab --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} yabhinav/ansible:${distribution}${version}-multi bash '
+  - 'docker run --td -h testlab.example.com --name testlab --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} yabhinav/ansible:${distribution}${version}-multi bash '
+
+  - docker ps -a 
 
   # Hostname checks.
   - 'docker exec --tty testlab env TERM=xterm cat /etc/hosts'
