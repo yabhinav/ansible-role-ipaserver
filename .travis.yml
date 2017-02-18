@@ -2,58 +2,62 @@
 services: docker
 
 env:
-  - distribution: centos  # Linux distribution
-    version: 6            # Distribution version
-    init: /sbin/init      # Path to init executable (differs for SysVInit/Systemd)
-    run_opts: ""          # Additional options for running the Docker container
-    playbook: test.yml    # Test playbook for the distribution
-  - distribution: centos
-    version: 7
-    init: /usr/lib/systemd/systemd
-    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-    playbook: test.yml
-  - distribution: fedora
-    version: 25
-    init: /usr/lib/systemd/systemd
-    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-    playbook: test.yml
-  # - distribution: ubuntu
-  #   version: 14.04
-  #   init: /sbin/init
-  #   run_opts: ""
-  #   playbook: test.yml
-  # - distribution: ubuntu
-  #   version: 12.04
-  #   init: /sbin/init
-  #   run_opts: ""
-  #   playbook: test.yml
+  global:
+    - ansible_opts: 'source ~/.bashrc; workon ansible_$ansible_version'
+  matrix:
+    - distribution: centos       # Linux distribution
+      version: 6                 # Distribution version
+      run_opts: ""               # Additional options for running the Docker container
+      ansible_version: 2.2.0.0   # version of ansible to run the playbooks
+      playbook: test.yml         # Test playbook for the distribution
+    - distribution: centos
+      version: 7
+      run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+      ansible_version: 2.2.0.0  
+      playbook: test.yml
+    - distribution: fedora
+      version: 25
+      run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+      ansible_version: 2.2.0.0 
+      playbook: test.yml
+    # - distribution: ubuntu
+    #   version: 14.04
+    #   run_opts: ""
+    #   playbook: test.yml
+    # - distribution: ubuntu
+    #   version: 12.04
+    #   run_opts: ""
+    #   playbook: test.yml
 
 before_install:
   # Pull container.
-  - 'docker pull yabhinav/ansible:${distribution}-${version}'
+  - 'docker pull yabhinav/ansible:${distribution}${version}-multi'
+
+before_script :
+  - 
 
 
 script:
   - container_id=$(mktemp)
   # Run container in detached state.
-  - 'docker run --detach -h testlab.example.com --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} yabhinav/ansible:${distribution}-${version} "${init}" > "${container_id}"'
-
-  # Ansible version check.
-  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible --version'
+  - 'docker run --detach -h testlab.example.com --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} yabhinav/ansible:${distribution}${version}-multi bash > "${container_id}"'
 
   # Hostname checks.
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm cat /etc/hosts'
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm hostname -f '
   - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm hostname -d'
 
-  # - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible all -m setup'
+  # Ansible version check.
+  - 'docker exec --tty "$(cat ${container_id})" bash -c "$ansible_opts; ansible --version" '
+
+  # - 'docker exec --tty "$(cat ${container_id})" bash -c "source ~/.bashrc; workon ansible_2.2.0.0; ansible all -m setup'
 
   # Ansible syntax check.
-  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} --syntax-check'
+  - 'docker exec --tty "$(cat ${container_id})" bash -c "$ansible_opts; ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} --syntax-check " '
 
   # Test role.
   - testrun=$(mktemp)
-  - docker exec "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} | tee -a ${testrun}
+  - docker exec --tty "$(cat ${container_id})" bash -c "$ansible_opts; ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook}" | tee -a ${testrun}
   - >
     tail ${testrun}
     | grep -q 'changed=.*failed=0'
@@ -62,7 +66,7 @@ script:
 
   # Test role idempotence.
   - idempotence=$(mktemp)
-  - docker exec "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} | tee -a ${idempotence}
+  - docker exec --tty "$(cat ${container_id})" bash -c "$ansible_opts; ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook}" | tee -a ${idempotence}
   - >
     tail ${idempotence}
     | grep -q 'changed=0.*failed=0'
@@ -78,10 +82,6 @@ script:
   # Check IPA user command
   - 'docker exec "$(cat ${container_id})" ipa user-find admin'
 
-  
-after_failure :
-  # Check IPA user command
-  - 'docker exec "$(cat ${container_id})" cat /var/log/ipaserver-install.log'
 
 
 # notifications:
