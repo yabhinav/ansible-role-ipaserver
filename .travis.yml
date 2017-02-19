@@ -33,7 +33,7 @@ before_script:
 
 script:
   # Create container and load the role as a volume
-  - /bin/bash docker-tests.sh
+  - travis_wait 20 /bin/bash docker-tests.sh
 
 
 notifications:
