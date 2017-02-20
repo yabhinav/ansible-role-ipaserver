@@ -12,12 +12,9 @@ env:
       version: 7
     - distribution: fedora
       version: 25
-    # - distribution: ubuntu
-    #   version: 14.04
-    #   run_opts: ""
-    # - distribution: ubuntu
-    #   version: 12.04
-    #   run_opts: ""
+    - distribution: ubuntu
+      version: 16.04
+
 
 services: docker
 
@@ -33,8 +30,8 @@ before_script:
 
 script:
   # Create container and load the role as a volume
-  - travis_wait 20 /bin/bash docker-tests.sh
+  - travis_wait 30 /bin/bash docker-tests.sh
 
 
-notifications:
-  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+# notifications:
+#   webhooks: https://galaxy.ansible.com/api/v1/notifications/

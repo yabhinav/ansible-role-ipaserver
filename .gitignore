@@ -1,2 +1,6 @@
 
 *.html
+
+# Ignore test-suite files
+docker-tests.sh
+playbooks/test.yml
