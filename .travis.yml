@@ -19,8 +19,9 @@ env:
 services: docker
 
 before_install:
-  # Install latest Git
-  - sudo apt-get install --only-upgrade git 
+  - sudo apt-get update
+  # Install latest Git and docker engine
+  - sudo apt-get install --only-upgrade git docker-engine
 
 
 before_script:
@@ -30,7 +31,7 @@ before_script:
 
 script:
   # Create container and load the role as a volume
-  - travis_wait 30 /bin/bash docker-tests.sh
+  - travis_wait 20 /bin/bash docker-tests.sh
 
 
 # notifications:
