@@ -34,10 +34,10 @@ before_script:
 script:
   - docker version
   # Create container and load the role as a volume
-  - travis_wait 40 /bin/bash docker-tests.sh
+  - travis_wait 30 /bin/bash docker-tests.sh
 
-# send notification to ansible-galaxy on build failure/change on release branch
+# send notification to ansible-galaxy on build failure/change on master branch
 notifications:
-  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+  email: true
 
 
