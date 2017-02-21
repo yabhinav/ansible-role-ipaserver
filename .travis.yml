@@ -1,4 +1,6 @@
 ---
+# Version 0.20 Added support for Fedora env
+# Author : Abhinav Y <http://yabhinav.github.io>
 
 sudo: required
 
@@ -34,6 +36,8 @@ script:
   # Create container and load the role as a volume
   - travis_wait 40 /bin/bash docker-tests.sh
 
+# send notification to ansible-galaxy on build failure/change on release branch
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
 
-# notifications:
-#   webhooks: https://galaxy.ansible.com/api/v1/notifications/
+
