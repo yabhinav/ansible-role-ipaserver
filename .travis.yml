@@ -1,82 +1,43 @@
 ---
-services: docker
+# Version 0.20 Added support for Fedora env
+# Author : Abhinav Y <http://yabhinav.github.io>
+
+sudo: required
 
 env:
-  - distribution: centos  # Linux distribution
-    version: 6            # Distribution version
-    init: /sbin/init      # Path to init executable (differs for SysVInit/Systemd)
-    run_opts: ""          # Additional options for running the Docker container
-    playbook: test.yml    # Test playbook for the distribution
-  - distribution: centos
-    version: 7
-    init: /usr/lib/systemd/systemd
-    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-    playbook: test.yml
-  # - distribution: fedora
-  #   version: 25
-  #   init: /usr/lib/systemd/systemd
-  #   run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
-  #   playbook: test.yml
-  # - distribution: ubuntu
-  #   version: 14.04
-  #   init: /sbin/init
-  #   run_opts: ""
-  #   playbook: test.yml
-  # - distribution: ubuntu
-  #   version: 12.04
-  #   init: /sbin/init
-  #   run_opts: ""
-  #   playbook: test.yml
+  global: 
+    - rolename : ansible-role-ipaserver
+  matrix:
+    - distribution: centos       # Linux distribution
+      version: 6                 # Distribution version
+    - distribution: centos
+      version: 7
+    - distribution: fedora
+      version: 25
+    # - distribution: ubuntu
+    #   version: 16.04
+
+
+services: docker
 
 before_install:
-  # Pull container.
-  - 'docker pull bertvv/ansible-testing:${distribution}_${version}'
+  - sudo apt-get update
+  # Install latest Git and docker engine
+  - sudo apt-get install --only-upgrade git docker-engine
 
+
+before_script:
+  # Fetch the latest test code for the role
+  - 'git clone --depth 1 https://github.com/yabhinav/ansible-test-suite'
+  - 'mv ansible-test-suite/$rolename/* . &&  rm -rf ansible-test-suite ' 
 
 script:
-  - container_id=$(mktemp)
-  # Run container in detached state.
-  - 'docker run --detach -h testlab.example.com --volume="${PWD}":/etc/ansible/roles/role_under_test:ro ${run_opts} bertvv/ansible-testing:${distribution}_${version} "${init}" > "${container_id}"'
+  - docker version
+  # Create container and load the role as a volume
+  - travis_wait 40 /bin/bash docker-tests.sh
 
-  # Ansible version check.
-  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible --version'
-
-  # Hostname checks.
-  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm cat /etc/hosts'
-  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm hostname'
-
-  # - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible all -m setup'
-
-  # Ansible syntax check.
-  - 'docker exec --tty "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} --syntax-check'
-
-  # Test role.
-  - testrun=$(mktemp)
-  - docker exec "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} | tee -a ${testrun}
-  - >
-    tail ${testrun}
-    | grep -q 'unreachable=0.*failed=0'
-    && (echo 'Role test: pass' && exit 0)
-    || (echo 'Role test: fail' && exit 1)
-
-  # Test role idempotence.
-  - idempotence=$(mktemp)
-  - docker exec "$(cat ${container_id})" env TERM=xterm ansible-playbook /etc/ansible/roles/role_under_test/tests/${playbook} | tee -a ${idempotence}
-  - >
-    tail ${idempotence}
-    | grep -q 'changed=0.*unreachable=0.*failed=0'
-    && (echo 'Idempotence test: pass' && exit 0)
-    || (echo 'Idempotence test: fail' && exit 1)
-
-  # Check if IPA Server is running
-  - 'docker exec "$(cat ${container_id})" ipactl status'
-
-  # Check klist
-  - 'docker exec "$(cat ${container_id})" klist'
-
-  # Check IPA user command
-  - 'docker exec "$(cat ${container_id})" ipa user-find admin'
-
-
+# send notification to ansible-galaxy on build failure/change on release branch
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
+
+

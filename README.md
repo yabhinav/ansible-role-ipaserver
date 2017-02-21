@@ -1,7 +1,7 @@
 IPA Server 
 ==========
 
-[![Build Status](https://travis-ci.org/yabhinav/ansible-role-ipaserver.svg?branch=release)](https://travis-ci.org/yabhinav/ansible-role-ipaserver)
+[![Build Status](https://travis-ci.org/yabhinav/ansible-role-ipaserver.svg?branch=master)](https://travis-ci.org/yabhinav/ansible-role-ipaserver)
 
 A role that installs and configures IPA server.
 
@@ -16,7 +16,7 @@ Role Variables
 
 Mandatory variable are listed here with default values :
 
-	ipaserver_realm: "TESTLAB"
+	ipaserver_realm: "EXAMPLE.COM"
 	ipaserver_domain: "example.com"
 
 	ipaserver_admin_password : * * * * * * * * * * * 
@@ -56,13 +56,13 @@ Example Playbook
 	- hosts: localhost
 	  become_user: True
 	  gather_facts: True
-
+	  
 	  roles:
 	    - yabhinav.ipaserver
 
 License
 -------
-	
+
 MIT
 
 
