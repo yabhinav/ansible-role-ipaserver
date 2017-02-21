@@ -30,8 +30,9 @@ before_script:
   - 'mv ansible-test-suite/$rolename/* . &&  rm -rf ansible-test-suite ' 
 
 script:
+  - docker version
   # Create container and load the role as a volume
-  - travis_wait 20 /bin/bash docker-tests.sh
+  - travis_wait 40 /bin/bash docker-tests.sh
 
 
 # notifications:
