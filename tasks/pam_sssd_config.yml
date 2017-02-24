@@ -1,3 +1,5 @@
+---
+
 - name: Enable pam mkhomedir
   lineinfile:
     dest: /etc/pam.d/common-session
@@ -10,6 +12,7 @@
     dest: /etc/sssd/sssd.conf
     regexp: '^services.*'
     line: 'services = nss, pam, ssh, sudo'
+    create: yes
   become: true
   notify:
     - restart sssd
