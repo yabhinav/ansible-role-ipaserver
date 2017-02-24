@@ -14,8 +14,10 @@ env:
       version: 7
     - distribution: fedora
       version: 25
-    # - distribution: ubuntu
-    #   version: 16.04
+    - distribution: ubuntu
+      version: 16.04
+    # - distribution: debian
+    #   version: 8
 
 
 services: docker

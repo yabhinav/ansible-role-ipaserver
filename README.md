@@ -60,6 +60,12 @@ Example Playbook
 	  roles:
 	    - yabhinav.ipaserver
 
+Issues
+------
+
+- It is not advised to execute this role from ansible running on python-virtualenv on Ubuntu16.04 locally due to this [issue](https://github.com/pypa/virtualenv/issues/1022) . Also have a look at same [issue here](https://github.com/ansible/ansible/issues/21691) 
+
+
 License
 -------
 

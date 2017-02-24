@@ -10,7 +10,7 @@
 
 - name: Install IPA Server Packages
   action: >
-    {{ansible_pkg_mgr}} name="{{ item }}" state=present
+    {{ ansible_pkg_mgr }} name="{{ item }}" state=latest
   with_items: "{{ ipaserver_packages }}"
   become: True
 

@@ -4,23 +4,23 @@ galaxy_info:
 
   license: MIT
 
-  min_ansible_version: 2.2.1
+  min_ansible_version: 2.0.0
 
   github_branch: release
 
   platforms:
     - name: EL
       versions:
-      - 6
-      - 7
-    # - name: Ubuntu
-    #   versions:
-    #   - all
-    # - name: Debian
-    #   versions:
-    #   - all
+        - 6
+        - 7
+    - name: Fedora
+      versions:
+        - 25
+    - name: Ubuntu
+      versions:
+        - xenial
 
-  galaxy_tags: ['ipaserver','freeipa','install',kerberos','security']
+  galaxy_tags: ['ipaserver','freeipa','install',kerberos','security','identity']
 
 
 dependencies: []
