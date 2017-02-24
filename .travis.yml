@@ -38,8 +38,5 @@ script:
   # Create container and load the role as a volume
   - travis_wait 30 /bin/bash docker-tests.sh
 
-# send notification to ansible-galaxy on build failure/change on master branch
-notifications:
-  email: true
 
 
