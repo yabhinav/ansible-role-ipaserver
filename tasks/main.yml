@@ -19,7 +19,7 @@
 
 - name: Ubuntu fixes
   include: pam_sssd_config.yml
-  when: '{{ ansible_os_family }} == "Debian" '
+  when: ansible_os_family == 'Debian'
 
 - name: Install IPA Server
   include: ipainstall.yml
