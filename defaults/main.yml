@@ -6,8 +6,8 @@ ipaserver_domain: "{{ ansible_domain }}"
 # IPA Kerberos Admin Configuration
 # Donot change the admin username, will cause issues with kinit
 ipaserver_admin_username: admin 
-ipaserver_admin_password : ipaadmin123
-ipaserver_dir_admin_password : ipaadmin123
+ipaserver_admin_password : Secret123
+ipaserver_dir_admin_password : Secret123
 
 ipaserver_configure_ssh: True
 ipaserver_configure_sshd: True
