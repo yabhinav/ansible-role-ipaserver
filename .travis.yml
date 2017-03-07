@@ -14,8 +14,8 @@ env:
       version: 7
     - distribution: fedora
       version: 25
-    - distribution: ubuntu
-      version: 16.04
+    # - distribution: ubuntu
+    #   version: 16.04
     # - distribution: debian
     #   version: 8
 
@@ -36,7 +36,7 @@ before_script:
 script:
   - docker version
   # Create container and load the role as a volume
-  - travis_wait 30 /bin/bash docker-tests.sh
+  - travis_wait 60 /bin/bash docker-tests.sh
 
 
 
