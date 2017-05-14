@@ -22,9 +22,6 @@ env:
 
 services: docker
 
-language: python
-python: "2.7"
-
 before_install:
   - sudo apt-get update
   # Install latest Git and docker engine

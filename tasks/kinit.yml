@@ -1,27 +1,12 @@
 ---
 
-# The Block Bug which counts failed even when rescued is done is not fixed even in ansible 2.3.0.0 release
 # Making Sure TGT is available for next steps
-# - block:
-#     - name: Check for Valid Kerberos TGT Cache
-#       shell: "klist -s"
-#       changed_when: False
-#   rescue:
-#     - name: Kinit IPA Admin
-#       script: kinit.exp {{ ipaserver_admin_username }} {{ ipaserver_admin_password }} {{ ipaserver_realm }}
-#       no_log: True
-#   become: True
-
-
-# Making Sure TGT is available for next steps
-- name: Check for Valid Kerberos TGT Cache
-  shell: "klist -s"
-  changed_when: False
-  register: klist
-  ignore_errors: True
-
-- name: Kinit IPA Admin
-  script: kinit.exp {{ ipaserver_admin_username }} {{ ipaserver_admin_password }} {{ ipaserver_realm }}
-  when: klist.failed
-  no_log: True
+- block:
+    - name: Check for Valid Kerberos TGT Cache
+      shell: "klist -s"
+      changed_when: False
+  rescue:
+    - name: Kinit IPA Admin
+      script: kinit.exp {{ ipaserver_admin_username }} {{ ipaserver_admin_password }} {{ ipaserver_realm }}
+      no_log: True
   become: True
