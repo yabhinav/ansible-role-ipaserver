@@ -4,6 +4,9 @@
 
 sudo: required
 
+language: python
+python: "2.7"
+
 env:
   global: 
     - rolename : ansible-role-ipaserver
@@ -16,14 +19,16 @@ env:
       version: 25
     # - distribution: ubuntu
     #   version: 16.04
+    # - distribution: debian
+    #   version: 8
 
 
 services: docker
 
 before_install:
   - sudo apt-get update
-  # Install latest Git and docker engine
-  - sudo apt-get install --only-upgrade git docker-engine
+  # Install/Upgrade latest Git and docker community engine
+  - sudo apt-get install --only-upgrade git docker-ce
 
 
 before_script:
@@ -34,10 +39,7 @@ before_script:
 script:
   - docker version
   # Create container and load the role as a volume
-  - travis_wait 40 /bin/bash docker-tests.sh
+  - travis_wait 60 /bin/bash docker-tests.sh
 
-# send notification to ansible-galaxy on build failure/change on release branch
-notifications:
-  webhooks: https://galaxy.ansible.com/api/v1/notifications/
 
 

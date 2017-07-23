@@ -1,2 +1,10 @@
 ---
-# handlers file for ipaserver
+# handlers file for ansible-role-ipaserver
+
+- name: restart sssd
+  service: name=sssd state=restarted
+  become: true
+
+- name: restart ssh
+  service: name=ssh state=restarted
+  become: true

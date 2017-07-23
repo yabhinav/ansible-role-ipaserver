@@ -1,7 +1,7 @@
 IPA Server 
 ==========
 
-[![Build Status](https://travis-ci.org/yabhinav/ansible-role-ipaserver.svg?branch=release)](https://travis-ci.org/yabhinav/ansible-role-ipaserver)
+[![Build Status](https://travis-ci.org/yabhinav/ansible-role-ipaserver.svg?branch=master)](https://travis-ci.org/yabhinav/ansible-role-ipaserver)
 
 A role that installs and configures IPA server.
 
@@ -32,7 +32,7 @@ Optional variables are listed here with default values :
 	ipaserver_idstart: 5000
 	ipaserver_idmax: False
 
-	ipaserver_setup_ntp: True
+	ipaserver_setup_ntp: True 
 
 	ipaserver_setup_dns: False
 	ipaserver_ssh_trust_dns: False
@@ -59,6 +59,13 @@ Example Playbook
 	  
 	  roles:
 	    - yabhinav.ipaserver
+
+Issues
+------
+
+- It is not advised to execute this role from ansible running on python-virtualenv on Ubuntu16.04 locally due to this [issue](https://github.com/pypa/virtualenv/issues/1022) . Also have a look at same [issue here](https://github.com/ansible/ansible/issues/21691) 
+- Freeipa-admintools is available only in Ubuntu16.04, So Debian 7,8 and Ubuntu 12.04 and 14.04 support not present for this role
+
 
 License
 -------
