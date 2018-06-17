@@ -3,7 +3,7 @@
 ipaserver_packages:
     - freeipa-server
     - dnsutils
-    - sssd-ldap 
+    - sssd-ldap
     - expect
 
 ipaserver_base_command: ipa-server-install -U
