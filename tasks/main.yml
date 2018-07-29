@@ -9,7 +9,7 @@
    - "defaults.yml"
 
 # @see https://osric.com/chris/accidental-developer/2017/10/ipa-server-upgrade-ipv6-stack-is-enabled-in-the-kernel-but-there-is-no-interface-that-has-1-address-assigned/
-- name: Ensure IPv6 is ENABLED
+- name: Ensure IPv6 is ENABLED for CentOS7
   sysctl:
     name: "{{ item.name }}"
     value: "{{ item.value }}"
@@ -24,6 +24,7 @@
     - name: net.ipv6.conf.eth0.disable_ipv6
       value: 1
   become : True
+  when: ansible_distribution =='CentOS' and ansible_distribution_major_version == '7'
 
 
 - name: Install IPA Server Packages

@@ -5,6 +5,7 @@
   shell: "{{ item }}"
   args:
     chdir: /etc/httpd/conf
+    warn: no
   with_items:
     - "ipa-getkeytab -s {{ ansible_fqdn }} -p HTTP/{{ ansible_fqdn }}@{{ ipaserver_realm }} -k ipa.keytab.new"
     - "cp ipa.keytab ipa.keytab.orig "
