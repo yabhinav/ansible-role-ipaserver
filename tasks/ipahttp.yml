@@ -8,7 +8,7 @@
     warn: no
   with_items:
     - "ipa-getkeytab -s {{ ansible_fqdn }} -p HTTP/{{ ansible_fqdn }}@{{ ipaserver_realm }} -k ipa.keytab.new"
-    - "cp ipa.keytab ipa.keytab.orig "
+    - "cp ipa.keytab ipa.keytab.orig 2>/dev/null || :"
     - "mv ipa.keytab.new ipa.keytab"
     - "chown apache:apache ipa.keytab*"
   register: ipakeytab
