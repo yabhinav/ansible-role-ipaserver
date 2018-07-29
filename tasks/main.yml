@@ -8,6 +8,24 @@
    - "{{ ansible_os_family }}.yml"
    - "defaults.yml"
 
+# @see https://osric.com/chris/accidental-developer/2017/10/ipa-server-upgrade-ipv6-stack-is-enabled-in-the-kernel-but-there-is-no-interface-that-has-1-address-assigned/
+- name: Ensure IPv6 is ENABLED
+  sysctl:
+    name: "{{ item.name }}"
+    value: "{{ item.value }}"
+    sysctl_set: yes
+    state: present
+    reload: yes
+  with_items :
+    - name: net.ipv6.conf.all.disable_ipv6
+      value: 0
+    - name: net.ipv6.conf.lo.disable_ipv6
+      value: 0
+    - name: net.ipv6.conf.eth0.disable_ipv6
+      value: 1
+  become : True
+
+
 - name: Install IPA Server Packages
   action: >
     {{ ansible_pkg_mgr }} name="{{ item }}" state=latest
@@ -32,4 +50,3 @@
 
 - name: Generate HTTP Keytab for IPA Web Server
   include: ipahttp.yml
-
